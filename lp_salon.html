@@ -16,22 +16,22 @@
     /* ===== デザイントークン ===== */
     :root {
       /* Colors */
-      --blue:        #3B6FF0;
-      --blue-dk:     #2451C8;
-      --blue-pale:   #EEF3FF;
-      --mint:        #2BC9A8;
-      --mint-dk:     #1FA887;
-      --mint-pale:   #E4FAF5;
-      --yellow:      #FFB700;
-      --yellow-dk:   #D99A00;
-      --yellow-pale: #FFF8E0;
-      --coral:       #FF6B6B;
-      --coral-pale:  #FFF0F0;
-      --dark:        #1C1E40;
-      --dark-mid:    #42456E;
-      --gray:        #7B7E9E;
-      --border-col:  #BFC3E0;
-      --bg:          #F4F5FC;
+      --blue:        #D4518A;
+      --blue-dk:     #A8336B;
+      --blue-pale:   #FFF0F5;
+      --mint:        #9B6FB5;
+      --mint-dk:     #7A4E96;
+      --mint-pale:   #F5EEFF;
+      --yellow:      #F4A261;
+      --yellow-dk:   #D4804A;
+      --yellow-pale: #FFF6EE;
+      --coral:       #FF8FAB;
+      --coral-pale:  #FFF0F5;
+      --dark:        #3D2A3A;
+      --dark-mid:    #6B4E67;
+      --gray:        #9E8099;
+      --border-col:  #E0BEDD;
+      --bg:          #FDF7F9;
       --white:       #FFFFFF;
       --line-green:  #06C755;
 
@@ -1037,6 +1037,131 @@
       border-radius: 4px;
     }
 
+    /* ===== 女性キャラクター ===== */
+    .salon-character-wrap {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .salon-lady {
+      width: 100%;
+      max-width: 270px;
+      filter: drop-shadow(4px 10px 18px rgba(212,81,138,0.22));
+      animation: floatChar 5s ease-in-out infinite;
+    }
+    @keyframes floatChar {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-14px); }
+    }
+    .character-bubble {
+      background: var(--white);
+      border: 2.5px solid var(--dark);
+      border-radius: 20px;
+      padding: 14px 22px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--dark);
+      box-shadow: var(--sh-dark);
+      line-height: 2;
+      text-align: center;
+      margin-top: 10px;
+      position: relative;
+    }
+    .character-bubble::before {
+      content: '';
+      position: absolute;
+      top: -14px; left: 50%;
+      transform: translateX(-50%);
+      border: 7px solid transparent;
+      border-bottom-color: var(--dark);
+    }
+    .character-bubble::after {
+      content: '';
+      position: absolute;
+      top: -10px; left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-bottom-color: var(--white);
+    }
+
+    /* ===== タイプライター ===== */
+    .typewriter-word {
+      color: var(--blue);
+      font-weight: 900;
+    }
+    .typewriter-cursor {
+      display: inline-block;
+      color: var(--blue);
+      font-weight: 900;
+      animation: cursorBlink 0.75s step-end infinite;
+    }
+    @keyframes cursorBlink {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0; }
+    }
+
+    /* ===== ロボット秘書 ===== */
+    .robot-section {
+      text-align: center;
+      margin: 48px 0 -16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .robot-mascot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .robot-svg {
+      width: 90px;
+      height: 130px;
+      animation: robotBob 3.2s ease-in-out infinite;
+    }
+    @keyframes robotBob {
+      0%,100% { transform: translateY(0) rotate(0deg); }
+      25%      { transform: translateY(-7px) rotate(-3deg); }
+      75%      { transform: translateY(-4px) rotate(3deg); }
+    }
+    .robot-speech {
+      background: var(--mint-pale);
+      border: 2px solid var(--mint-dk);
+      border-radius: var(--r-md);
+      padding: 8px 18px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--mint-dk);
+      text-align: center;
+      line-height: 1.7;
+      box-shadow: 2px 2px 0px var(--mint-dk);
+    }
+
+    /* ===== ヒーロー背景グラデーション調整 ===== */
+    .hero {
+      background: linear-gradient(135deg, #fff0f5 0%, #f5eeff 50%, #fff6ee 100%) !important;
+    }
+    .hero-deco-circle.c1 {
+      background: rgba(212,81,138,0.1) !important;
+    }
+    .hero-deco-circle.c2 {
+      background: rgba(155,111,181,0.12) !important;
+    }
+    .hero-title em {
+      color: var(--blue) !important;
+      background: linear-gradient(180deg, transparent 55%, rgba(212,81,138,0.22) 55%) !important;
+    }
+
+    /* ===== タイプライター強調見出し ===== */
+    .tw-highlight {
+      display: inline-block;
+      padding: 2px 8px;
+      background: var(--blue-pale);
+      border-radius: 8px;
+    }
+
     /* ===================================================
        ポップ・インタラクション拡張
     =================================================== */
@@ -1280,52 +1405,87 @@
         </div>
       </div>
 
-      <!-- 右：装飾カード -->
+      <!-- 右：女性キャラクター -->
       <div class="hero-visual" aria-hidden="true">
         <div style="position:relative; padding-top: 20px;">
           <div class="hero-floating-tag">✦ 小規模サロン専門サポート</div>
-          <div class="hero-card">
-            <p class="hero-card-title">解決できる主なお悩み</p>
+          <div class="salon-character-wrap">
+            <!-- 女性サロンオーナーSVGイラスト -->
+            <svg class="salon-lady" viewBox="0 0 280 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 背景円 -->
+              <circle cx="140" cy="200" r="148" fill="#FFF0F5" opacity="0.55"/>
+              <circle cx="140" cy="200" r="110" fill="#FFD6E7" opacity="0.22"/>
+              <!-- スカート -->
+              <path d="M75 268 Q52 370 55 395 L225 395 Q228 370 205 268Z" fill="#D4518A" stroke="#3D2A3A" stroke-width="2"/>
+              <path d="M95 278 Q85 345 88 385" stroke="#FF8FAB" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+              <path d="M155 275 Q165 345 162 388" stroke="#FF8FAB" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+              <!-- エプロン装飾 -->
+              <path d="M105 272 Q140 295 175 272 L168 310 Q140 325 112 310Z" fill="white" stroke="#3D2A3A" stroke-width="1.5" opacity="0.85"/>
+              <path d="M128 312 Q140 316 152 312 L152 330 Q140 334 128 330Z" fill="white" stroke="#3D2A3A" stroke-width="1.5" opacity="0.75"/>
+              <!-- トップス -->
+              <path d="M95 188 Q82 228 75 268 L205 268 Q218 228 185 188Z" fill="#F9748F" stroke="#3D2A3A" stroke-width="2"/>
+              <!-- カラー -->
+              <path d="M118 194 L140 222 L162 194" fill="white" stroke="#3D2A3A" stroke-width="1.8" stroke-linejoin="round"/>
+              <!-- 左腕 -->
+              <path d="M95 205 Q65 232 60 265" stroke="#FFDDD2" stroke-width="18" stroke-linecap="round"/>
+              <circle cx="58" cy="272" r="15" fill="#FFDDD2" stroke="#3D2A3A" stroke-width="1.8"/>
+              <!-- 左手（手帳を持つ） -->
+              <rect x="30" y="255" width="28" height="36" rx="5" fill="white" stroke="#3D2A3A" stroke-width="1.8"/>
+              <rect x="33" y="259" width="22" height="26" rx="3" fill="#F5EEFF"/>
+              <path d="M36 265 H51 M36 270 H51 M36 275 H44" stroke="#9B6FB5" stroke-width="1.2" stroke-linecap="round"/>
+              <!-- 右腕 -->
+              <path d="M185 205 Q215 232 220 260" stroke="#FFDDD2" stroke-width="18" stroke-linecap="round"/>
+              <circle cx="222" cy="267" r="15" fill="#FFDDD2" stroke="#3D2A3A" stroke-width="1.8"/>
+              <!-- 右手（キラキラスティック） -->
+              <line x1="224" y1="258" x2="248" y2="232" stroke="#F4A261" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M248 220 L251 228 L259 228 L253 233 L255 241 L248 236 L241 241 L243 233 L237 228 L245 228Z" fill="#F4A261" stroke="#D4804A" stroke-width="1.2"/>
+              <circle cx="248" cy="228" r="4" fill="white" opacity="0.7"/>
+              <!-- 首 -->
+              <rect x="128" y="158" width="24" height="33" rx="12" fill="#FFDDD2" stroke="#3D2A3A" stroke-width="1.8"/>
+              <!-- 頭 -->
+              <ellipse cx="140" cy="128" rx="54" ry="60" fill="#FFDDD2" stroke="#3D2A3A" stroke-width="2.2"/>
+              <!-- 髪（ロング） -->
+              <path d="M86 115 Q66 148 70 202 Q78 218 92 204 Q84 168 93 130" fill="#8B5E52" stroke="#3D2A3A" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M194 115 Q214 148 210 202 Q202 218 188 204 Q196 168 187 130" fill="#8B5E52" stroke="#3D2A3A" stroke-width="1.8" stroke-linejoin="round"/>
+              <ellipse cx="140" cy="85" rx="58" ry="40" fill="#8B5E52" stroke="#3D2A3A" stroke-width="2.2"/>
+              <!-- 髪のハイライト -->
+              <path d="M106 72 Q130 58 158 62" stroke="#C4897A" stroke-width="2.8" stroke-linecap="round" opacity="0.65"/>
+              <!-- リボン髪飾り -->
+              <path d="M170 72 Q178 60 192 66 Q186 78 176 74Z" fill="#D4518A" stroke="#3D2A3A" stroke-width="1.5"/>
+              <path d="M198 68 Q206 58 200 65 Q198 77 190 73Z" fill="#D4518A" stroke="#3D2A3A" stroke-width="1.5"/>
+              <circle cx="190" cy="70" r="6" fill="#FF8FAB" stroke="#3D2A3A" stroke-width="1.5"/>
+              <circle cx="190" cy="70" r="3" fill="white" opacity="0.6"/>
+              <!-- 目 -->
+              <ellipse cx="122" cy="130" rx="11" ry="12" fill="white" stroke="#3D2A3A" stroke-width="1.8"/>
+              <ellipse cx="158" cy="130" rx="11" ry="12" fill="white" stroke="#3D2A3A" stroke-width="1.8"/>
+              <circle cx="124" cy="132" r="7" fill="#3D2A3A"/>
+              <circle cx="160" cy="132" r="7" fill="#3D2A3A"/>
+              <circle cx="126" cy="130" r="3" fill="white"/>
+              <circle cx="162" cy="130" r="3" fill="white"/>
+              <!-- まつげ -->
+              <path d="M112 120 Q120 113 132 120" stroke="#3D2A3A" stroke-width="2" stroke-linecap="round" fill="none"/>
+              <path d="M148 120 Q156 113 168 120" stroke="#3D2A3A" stroke-width="2" stroke-linecap="round" fill="none"/>
+              <!-- 頬紅 -->
+              <ellipse cx="106" cy="146" rx="15" ry="9" fill="#FFB3C1" opacity="0.5"/>
+              <ellipse cx="174" cy="146" rx="15" ry="9" fill="#FFB3C1" opacity="0.5"/>
+              <!-- 鼻 -->
+              <path d="M136 142 Q140 147 144 142" stroke="#C4897A" stroke-width="1.5" stroke-linecap="round"/>
+              <!-- 笑顔 -->
+              <path d="M126 158 Q140 172 154 158" stroke="#3D2A3A" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+              <!-- 飾り・ハート・スパークル -->
+              <path d="M44 105 Q47 99 50 105 Q53 99 56 105 L50 113Z" fill="#FF8FAB" opacity="0.75"/>
+              <path d="M228 85 Q231 79 234 85 Q237 79 240 85 L234 93Z" fill="#D4518A" opacity="0.6"/>
+              <text x="28" y="86" font-size="18" fill="#F4A261" opacity="0.8">✦</text>
+              <text x="246" y="145" font-size="15" fill="#9B6FB5" opacity="0.75">✦</text>
+              <text x="16" y="160" font-size="14" fill="#D4518A" opacity="0.55">✿</text>
+              <text x="260" y="108" font-size="12" fill="#F4A261" opacity="0.65">✿</text>
+            </svg>
 
-            <div class="hero-card-item">
-              <div class="hero-card-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect x="3" y="3" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.5"/>
-                  <path d="M7 10H13M7 7H13M7 13H10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <div class="hero-card-text">
-                <strong>予約管理・スケジュール</strong>
-                <span>Excelや手書きからの脱却</span>
-                <span class="hero-card-badge">自動化で時短</span>
-              </div>
-            </div>
-
-            <div class="hero-card-item">
-              <div class="hero-card-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/>
-                  <path d="M10 7V10L12.5 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <div class="hero-card-text">
-                <strong>毎日の事務作業の効率化</strong>
-                <span>繰り返し作業をAIで削減</span>
-                <span class="hero-card-badge">AI活用</span>
-              </div>
-            </div>
-
-            <div class="hero-card-item">
-              <div class="hero-card-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M10 3C7 3 4.5 5 4.5 7.5C4.5 9.5 6 11 8 11.5L7.5 13.5C7.4 13.8 7.7 14 8 13.8L11 12H13C15.5 12 17 10.5 17 8.5C17 5.5 14 3 10 3Z" stroke="currentColor" stroke-width="1.5"/>
-                </svg>
-              </div>
-              <div class="hero-card-text">
-                <strong>SNS・集客・リピート対策</strong>
-                <span>何から始めるかを一緒に整理</span>
-                <span class="hero-card-badge">集客改善</span>
-              </div>
+            <!-- キャラクタースピーチバブル（タイプライター） -->
+            <div class="character-bubble">
+              AIが、あなたの<br>
+              <span class="typewriter-word" id="tw-hero"></span><span class="typewriter-cursor">|</span><br>
+              を自動化します ✨
             </div>
           </div>
         </div>
@@ -1346,7 +1506,7 @@
     <div class="trouble-inner">
       <span class="chip yellow">💬 よくあるご相談 TOP 5</span>
       <h2 class="section-title" id="trouble-heading">
-        「何から手をつけていいか<br>分からない」——<br>
+        <span class="tw-highlight"><span id="tw-trouble"></span><span class="typewriter-cursor" id="tw-trouble-cursor">|</span></span><br>
         その言葉、よく聞きます。
       </h2>
       <p class="section-lead">
@@ -1479,6 +1639,57 @@
             毎日のルーティン作業をAIと仕組みで自動化します。
           </p>
           <span class="service-card-tag speed">⚡ LINE自動化・AI文章作成</span>
+        </div>
+      </div>
+
+      <!-- ロボット秘書マスコット -->
+      <div class="robot-section fade-in">
+        <div class="robot-mascot">
+          <svg class="robot-svg" viewBox="0 0 120 155" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- アンテナ -->
+            <line x1="60" y1="18" x2="60" y2="7" stroke="#3D2A3A" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="60" cy="4" r="5" fill="#D4518A" stroke="#3D2A3A" stroke-width="1.5"/>
+            <circle cx="60" cy="4" r="9" fill="#D4518A" opacity="0.18"/>
+            <!-- 頭 -->
+            <rect x="22" y="18" width="76" height="62" rx="20" fill="white" stroke="#3D2A3A" stroke-width="2.5"/>
+            <rect x="28" y="23" width="34" height="10" rx="5" fill="#F5EEFF" opacity="0.8"/>
+            <!-- 目（左） -->
+            <rect x="32" y="36" width="20" height="20" rx="7" fill="#9B6FB5" stroke="#3D2A3A" stroke-width="2"/>
+            <circle cx="38" cy="42" r="5" fill="white"/>
+            <circle cx="40" cy="40" r="2" fill="white"/>
+            <!-- 目（右） -->
+            <rect x="68" y="36" width="20" height="20" rx="7" fill="#9B6FB5" stroke="#3D2A3A" stroke-width="2"/>
+            <circle cx="74" cy="42" r="5" fill="white"/>
+            <circle cx="76" cy="40" r="2" fill="white"/>
+            <!-- 口パネル -->
+            <rect x="36" y="63" width="48" height="12" rx="6" fill="#FFF0F5" stroke="#3D2A3A" stroke-width="1.5"/>
+            <path d="M42 69 Q60 76 78 69" stroke="#D4518A" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <!-- 耳 -->
+            <rect x="10" y="34" width="12" height="22" rx="5" fill="#F5EEFF" stroke="#3D2A3A" stroke-width="2"/>
+            <circle cx="16" cy="45" r="4" fill="#9B6FB5" opacity="0.45"/>
+            <rect x="98" y="34" width="12" height="22" rx="5" fill="#F5EEFF" stroke="#3D2A3A" stroke-width="2"/>
+            <circle cx="104" cy="45" r="4" fill="#9B6FB5" opacity="0.45"/>
+            <!-- リボンタイ -->
+            <path d="M46 83 L60 91 L74 83 L60 76Z" fill="#D4518A" stroke="#3D2A3A" stroke-width="1.5" stroke-linejoin="round"/>
+            <circle cx="60" cy="84" r="4.5" fill="#FF8FAB" stroke="#3D2A3A" stroke-width="1.5"/>
+            <!-- ボディ -->
+            <rect x="18" y="96" width="84" height="52" rx="18" fill="white" stroke="#3D2A3A" stroke-width="2.5"/>
+            <!-- パネル -->
+            <rect x="32" y="106" width="56" height="30" rx="9" fill="#FFF0F5" stroke="#3D2A3A" stroke-width="1.5"/>
+            <!-- ボタン3つ -->
+            <circle cx="46" cy="121" r="7" fill="#D4518A" stroke="#3D2A3A" stroke-width="1.5"/>
+            <circle cx="60" cy="121" r="7" fill="#9B6FB5" stroke="#3D2A3A" stroke-width="1.5"/>
+            <circle cx="74" cy="121" r="7" fill="#F4A261" stroke="#3D2A3A" stroke-width="1.5"/>
+            <!-- ハートマーク -->
+            <path d="M55 110 Q57.5 107 60 110 Q62.5 107 65 110 Q65 114 60 118 Q55 114 55 110Z" fill="#FF8FAB" opacity="0.55"/>
+            <!-- 腕（左） -->
+            <rect x="0" y="100" width="18" height="38" rx="9" fill="white" stroke="#3D2A3A" stroke-width="2"/>
+            <circle cx="9" cy="143" r="9" fill="#F5EEFF" stroke="#3D2A3A" stroke-width="2"/>
+            <!-- 腕（右） -->
+            <rect x="102" y="100" width="18" height="38" rx="9" fill="white" stroke="#3D2A3A" stroke-width="2"/>
+            <circle cx="111" cy="143" r="9" fill="#F5EEFF" stroke="#3D2A3A" stroke-width="2"/>
+          </svg>
+          <div class="robot-speech">AIアシスタントが<br>24時間サポート！ 🤖✨</div>
         </div>
       </div>
 
@@ -1869,6 +2080,45 @@
     window.addEventListener('scroll', () => {
       navbar.style.boxShadow = scrollY > 10 ? '0 3px 0px var(--dark)' : 'none';
     });
+
+    // ===== タイプライターアニメーション =====
+    function createTypewriter(elId, texts, speed) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      let idx = 0, charIdx = 0, deleting = false;
+      function tick() {
+        const cur = texts[idx];
+        if (deleting) {
+          el.textContent = cur.substring(0, charIdx - 1);
+          charIdx--;
+        } else {
+          el.textContent = cur.substring(0, charIdx + 1);
+          charIdx++;
+        }
+        if (!deleting && charIdx === cur.length) {
+          setTimeout(() => { deleting = true; tick(); }, 2000);
+          return;
+        }
+        if (deleting && charIdx === 0) {
+          deleting = false;
+          idx = (idx + 1) % texts.length;
+        }
+        setTimeout(tick, deleting ? 55 : speed);
+      }
+      tick();
+    }
+
+    // ヒーローキャラクター吹き出し
+    createTypewriter('tw-hero',
+      ['予約管理', 'SNS投稿', '事務作業', 'お客様対応', 'シフト管理'],
+      110
+    );
+
+    // 悩みセクション見出し
+    createTypewriter('tw-trouble',
+      ['「何から手をつければいい？」', '「IT化、どこから始めれば…」', '「オーナー業に集中できない」', '「SNS集客、何から手をつける？」'],
+      80
+    );
   </script>
 
 </body>
