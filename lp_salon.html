@@ -1,0 +1,1875 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>サロン経営者のためのIT・AI活用支援 | 解決.com</title>
+  <meta name="description" content="予約管理・事務作業・集客の悩みをやさしく解決。IT・AIが苦手な美容サロン・美容室の経営者さんのための、安心のIT支援サービスです。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ===== リセット ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ===== デザイントークン ===== */
+    :root {
+      /* Colors */
+      --blue:        #3B6FF0;
+      --blue-dk:     #2451C8;
+      --blue-pale:   #EEF3FF;
+      --mint:        #2BC9A8;
+      --mint-dk:     #1FA887;
+      --mint-pale:   #E4FAF5;
+      --yellow:      #FFB700;
+      --yellow-dk:   #D99A00;
+      --yellow-pale: #FFF8E0;
+      --coral:       #FF6B6B;
+      --coral-pale:  #FFF0F0;
+      --dark:        #1C1E40;
+      --dark-mid:    #42456E;
+      --gray:        #7B7E9E;
+      --border-col:  #BFC3E0;
+      --bg:          #F4F5FC;
+      --white:       #FFFFFF;
+      --line-green:  #06C755;
+
+      /* Shadows (toy / LEGO offset) */
+      --sh-dark:     5px 5px 0px var(--dark);
+      --sh-dark-sm:  3px 3px 0px var(--dark);
+      --sh-blue:     5px 5px 0px var(--blue-dk);
+      --sh-mint:     5px 5px 0px var(--mint-dk);
+      --sh-yellow:   5px 5px 0px var(--yellow-dk);
+
+      /* Border */
+      --bw: 2.5px;
+
+      /* Radius */
+      --r-sm:   12px;
+      --r-md:   18px;
+      --r-lg:   24px;
+      --r-xl:   32px;
+      --r-pill: 100px;
+
+      /* Font */
+      --font: 'M PLUS Rounded 1c', 'メイリオ', 'Meiryo', 'Hiragino Kaku Gothic ProN', sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--dark);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; height: auto; }
+
+    /* ===== ユーティリティ ===== */
+    .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      padding: 6px 14px;
+      border-radius: var(--r-pill);
+      border: var(--bw) solid var(--dark);
+      box-shadow: var(--sh-dark-sm);
+      background: var(--white);
+      color: var(--dark);
+      margin-bottom: 18px;
+    }
+
+    .chip.blue   { background: var(--blue-pale);   color: var(--blue-dk); }
+    .chip.mint   { background: var(--mint-pale);   color: var(--mint-dk); }
+    .chip.yellow { background: var(--yellow-pale); color: var(--yellow-dk); }
+
+    .section-title {
+      font-size: clamp(22px, 4vw, 32px);
+      font-weight: 900;
+      line-height: 1.45;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+    .section-lead {
+      font-size: clamp(14px, 2.4vw, 16px);
+      color: var(--dark-mid);
+      line-height: 1.9;
+    }
+
+    /* ===== ボタン ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 800;
+      padding: 16px 32px;
+      border-radius: var(--r-pill);
+      border: var(--bw) solid var(--dark);
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+      text-decoration: none;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .btn:hover  { transform: translate(2px,2px); }
+    .btn:active { transform: translate(4px,4px); }
+
+    .btn-primary {
+      background: var(--blue);
+      color: var(--white);
+      box-shadow: var(--sh-dark);
+    }
+    .btn-primary:hover  { box-shadow: 3px 3px 0px var(--dark); }
+    .btn-primary:active { box-shadow: none; }
+
+    .btn-line {
+      background: var(--line-green);
+      color: var(--white);
+      box-shadow: var(--sh-dark);
+    }
+    .btn-line:hover  { box-shadow: 3px 3px 0px var(--dark); }
+    .btn-line:active { box-shadow: none; }
+
+    .btn-outline {
+      background: var(--white);
+      color: var(--blue);
+      box-shadow: var(--sh-blue);
+    }
+    .btn-outline:hover  { box-shadow: 3px 3px 0px var(--blue-dk); }
+    .btn-outline:active { box-shadow: none; }
+
+    .btn-yellow {
+      background: var(--yellow);
+      color: var(--dark);
+      box-shadow: var(--sh-dark);
+    }
+    .btn-yellow:hover  { box-shadow: 3px 3px 0px var(--dark); }
+    .btn-yellow:active { box-shadow: none; }
+
+    .btn-lg { font-size: 18px; padding: 20px 40px; }
+
+    /* ===== ナビゲーション ===== */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: var(--bw) solid var(--dark);
+      padding: 12px 20px;
+    }
+    .navbar-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .navbar-logo-icon {
+      width: 34px; height: 34px;
+      background: var(--blue);
+      border-radius: 10px;
+      border: var(--bw) solid var(--dark);
+      box-shadow: 2px 2px 0px var(--dark);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .navbar-logo-text {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--dark);
+      letter-spacing: 0.03em;
+    }
+    .navbar-logo-text span { color: var(--blue); }
+    .navbar-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--blue);
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 800;
+      padding: 9px 20px;
+      border-radius: var(--r-pill);
+      border: var(--bw) solid var(--dark);
+      box-shadow: 3px 3px 0px var(--dark);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .navbar-cta:hover  { transform: translate(1px,1px); box-shadow: 2px 2px 0px var(--dark); }
+    .navbar-cta:active { transform: translate(3px,3px); box-shadow: none; }
+
+    /* ===== ドットパターン背景 ===== */
+    .dot-bg {
+      background-image: radial-gradient(circle, rgba(28,30,64,0.07) 1.5px, transparent 1.5px);
+      background-size: 22px 22px;
+    }
+
+    /* ===== ヒーロー ===== */
+    .hero {
+      padding: 110px 20px 72px;
+      background-color: var(--blue-pale);
+      position: relative;
+      overflow: hidden;
+    }
+    /* 装飾円 */
+    .hero-deco-circle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-deco-circle.c1 {
+      width: 360px; height: 360px;
+      top: -120px; right: -80px;
+      background: rgba(59,111,240,0.1);
+    }
+    .hero-deco-circle.c2 {
+      width: 260px; height: 260px;
+      bottom: -100px; left: -60px;
+      background: rgba(43,201,168,0.12);
+    }
+
+    .hero-grid {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--white);
+      border: var(--bw) solid var(--dark);
+      box-shadow: var(--sh-dark-sm);
+      color: var(--dark-mid);
+      font-size: 13px;
+      font-weight: 800;
+      padding: 7px 16px;
+      border-radius: var(--r-pill);
+      margin-bottom: 20px;
+    }
+    .hero-badge-dot {
+      width: 8px; height: 8px;
+      background: var(--mint);
+      border-radius: 50%;
+      border: 2px solid var(--dark);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(0.75); }
+    }
+
+    .hero-title {
+      font-size: clamp(26px, 4.5vw, 42px);
+      font-weight: 900;
+      line-height: 1.45;
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--blue);
+      background: linear-gradient(180deg, transparent 55%, rgba(59,111,240,0.2) 55%);
+    }
+
+    .hero-sub {
+      font-size: clamp(14px, 2.4vw, 16px);
+      color: var(--dark-mid);
+      line-height: 1.9;
+      margin-bottom: 24px;
+    }
+
+    .hero-assurance {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--mint-dk);
+      background: var(--mint-pale);
+      border: var(--bw) solid var(--mint-dk);
+      border-radius: var(--r-pill);
+      padding: 8px 16px;
+      margin-bottom: 28px;
+      width: fit-content;
+    }
+
+    .hero-actions-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .hero-trust {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .hero-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dark-mid);
+    }
+    .hero-trust-item::before {
+      content: '✓';
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px; height: 18px;
+      background: var(--mint);
+      color: white;
+      border-radius: 50%;
+      border: 2px solid var(--dark);
+      font-size: 10px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    /* ヒーロー右カード */
+    .hero-visual { position: relative; padding-top: 20px; }
+
+    .hero-card {
+      background: var(--white);
+      border-radius: var(--r-lg);
+      border: var(--bw) solid var(--dark);
+      box-shadow: var(--sh-dark);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--blue), var(--mint));
+    }
+    .hero-card-title {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: var(--gray);
+      margin-bottom: 18px;
+      text-transform: uppercase;
+    }
+    .hero-card-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 2px dashed var(--border-col);
+    }
+    .hero-card-item:last-child { border-bottom: none; }
+    .hero-card-icon {
+      width: 40px; height: 40px;
+      background: var(--blue-pale);
+      border: var(--bw) solid var(--dark);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: var(--blue);
+      box-shadow: 2px 2px 0px var(--dark);
+    }
+    .hero-card-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 2px;
+    }
+    .hero-card-text span { font-size: 12px; color: var(--gray); }
+    .hero-card-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      background: var(--mint-pale);
+      color: var(--mint-dk);
+      border: 1.5px solid var(--mint-dk);
+      padding: 2px 8px;
+      border-radius: var(--r-pill);
+      margin-top: 4px;
+    }
+    .hero-floating-tag {
+      position: absolute;
+      top: -14px; right: 20px;
+      background: var(--yellow);
+      border: var(--bw) solid var(--dark);
+      box-shadow: var(--sh-dark-sm);
+      border-radius: var(--r-pill);
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--dark);
+      white-space: nowrap;
+    }
+
+    /* ===== 共感・悩みセクション ===== */
+    .trouble {
+      padding: 80px 20px;
+      background: var(--yellow-pale);
+      border-top: var(--bw) solid var(--dark);
+      border-bottom: var(--bw) solid var(--dark);
+    }
+    .trouble-inner { max-width: 960px; margin: 0 auto; text-align: center; }
+
+    .trouble-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 40px;
+      text-align: left;
+    }
+    .trouble-item {
+      background: var(--white);
+      border-radius: var(--r-md);
+      border: var(--bw) solid var(--dark);
+      box-shadow: var(--sh-dark);
+      padding: 22px 22px 22px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      border-left: 6px solid var(--blue);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .trouble-item:hover { transform: translate(-2px,-2px); box-shadow: 7px 7px 0px var(--dark); }
+    .trouble-item:nth-child(2) { border-left-color: var(--mint); }
+    .trouble-item:nth-child(3) { border-left-color: var(--yellow); }
+    .trouble-item:nth-child(4) { border-left-color: var(--coral); }
+    .trouble-item:nth-child(5) { border-left-color: var(--blue); }
+
+    .trouble-item-icon {
+      width: 44px; height: 44px;
+      background: var(--yellow-pale);
+      border: var(--bw) solid var(--dark);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .trouble-item-text { font-size: 14px; color: var(--dark-mid); line-height: 1.7; }
+    .trouble-item-text strong { display: block; font-size: 15px; font-weight: 800; color: var(--dark); margin-bottom: 4px; }
+
+    .trouble-closing {
+      margin-top: 40px;
+      padding: 28px 32px;
+      background: var(--white);
+      border-radius: var(--r-lg);
+      border: var(--bw) solid var(--dark);
+      box-shadow: var(--sh-dark);
+    }
+    .trouble-closing p { font-size: 18px; font-weight: 800; color: var(--dark); line-height: 1.7; }
+    .trouble-closing span { color: var(--blue); }
+
+    /* ===== サービス概要 ===== */
+    .service {
+      padding: 80px 20px;
+      background: var(--white);
+    }
+    .service-inner { max-width: 960px; margin: 0 auto; }
+    .service-header { text-align: center; margin-bottom: 48px; }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .service-card {
+      background: var(--white);
+      border-radius: var(--r-lg);
+      border: var(--bw) solid var(--dark);
+      box-shadow: var(--sh-dark);
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .service-card:hover { transform: translate(-2px,-2px); box-shadow: 7px 7px 0px var(--dark); }
+
+    /* カードごとの上ストライプ */
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 7px;
+    }
+    .service-card:nth-child(1)::before { background: var(--blue); }
+    .service-card:nth-child(2)::before { background: var(--mint); }
+    .service-card:nth-child(3)::before { background: var(--yellow); }
+    .service-card:nth-child(4)::before { background: var(--coral); }
+
+    .service-card-num {
+      position: absolute;
+      top: 14px; right: 18px;
+      font-size: 52px;
+      font-weight: 900;
+      color: rgba(28,30,64,0.06);
+      line-height: 1;
+    }
+    .service-card-icon {
+      width: 54px; height: 54px;
+      border: var(--bw) solid var(--dark);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+      color: var(--blue);
+      box-shadow: 3px 3px 0px var(--dark);
+    }
+    .service-card:nth-child(1) .service-card-icon { background: var(--blue-pale); }
+    .service-card:nth-child(2) .service-card-icon { background: var(--mint-pale); color: var(--mint-dk); }
+    .service-card:nth-child(3) .service-card-icon { background: var(--yellow-pale); color: var(--yellow-dk); }
+    .service-card:nth-child(4) .service-card-icon { background: var(--coral-pale); color: var(--coral); }
+
+    .service-card-title { font-size: 17px; font-weight: 900; color: var(--dark); margin-bottom: 10px; }
+    .service-card-text  { font-size: 14px; color: var(--dark-mid); line-height: 1.8; }
+
+    .service-card-tag {
+      display: inline-block;
+      font-size: 11px; font-weight: 800;
+      padding: 4px 12px;
+      border-radius: var(--r-pill);
+      border: 1.5px solid;
+      margin-top: 14px;
+    }
+    .service-card-tag.speed { background: var(--mint-pale); color: var(--mint-dk); border-color: var(--mint-dk); }
+    .service-card-tag.trust { background: var(--blue-pale); color: var(--blue-dk); border-color: var(--blue-dk); }
+
+    .service-catchphrase {
+      margin-top: 40px;
+      padding: 36px;
+      background: var(--dark);
+      border-radius: var(--r-xl);
+      border: var(--bw) solid var(--dark);
+      box-shadow: var(--sh-dark);
+      text-align: center;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .service-catchphrase::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      border: 50px solid rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+    .service-catchphrase p {
+      font-size: clamp(16px, 3vw, 20px);
+      font-weight: 900;
+      line-height: 1.7;
+      position: relative; z-index: 1;
+    }
+    .service-catchphrase small {
+      display: block;
+      font-size: 13px; font-weight: 500;
+      opacity: 0.65;
+      margin-top: 10px;
+      position: relative; z-index: 1;
+    }
+
+    /* ===== 導入の流れ ===== */
+    .flow {
+      padding: 80px 20px;
+      background: var(--mint-pale);
+      border-top: var(--bw) solid var(--dark);
+      border-bottom: var(--bw) solid var(--dark);
+    }
+    .flow-inner { max-width: 960px; margin: 0 auto; }
+    .flow-header { text-align: center; margin-bottom: 48px; }
+
+    .flow-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      position: relative;
+    }
+    /* ステップ間の点線 */
+    .flow-steps::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: calc(12.5% + 16px);
+      right: calc(12.5% + 16px);
+      height: 2px;
+      border-top: 3px dashed rgba(28,30,64,0.25);
+      z-index: 0;
+    }
+
+    .flow-step { text-align: center; position: relative; z-index: 1; }
+    .flow-step-num {
+      width: 74px; height: 74px;
+      background: var(--white);
+      border: var(--bw) solid var(--dark);
+      box-shadow: var(--sh-dark);
+      border-radius: 50%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      margin: 0 auto 18px;
+    }
+    .flow-step:nth-child(1) .flow-step-num { background: var(--blue); color: var(--white); }
+    .flow-step:nth-child(2) .flow-step-num { background: var(--mint); color: var(--white); }
+    .flow-step:nth-child(3) .flow-step-num { background: var(--yellow); color: var(--dark); }
+    .flow-step:nth-child(4) .flow-step-num { background: var(--coral); color: var(--white); }
+
+    .flow-step-num span   { font-size: 10px; font-weight: 800; letter-spacing: 0.05em; line-height: 1; }
+    .flow-step-num strong { font-size: 24px; font-weight: 900; line-height: 1; }
+
+    .flow-step-card {
+      background: var(--white);
+      border: var(--bw) solid var(--dark);
+      box-shadow: var(--sh-dark);
+      border-radius: var(--r-md);
+      padding: 16px 14px;
+    }
+    .flow-step-title { font-size: 14px; font-weight: 900; color: var(--dark); margin-bottom: 8px; }
+    .flow-step-text  { font-size: 12px; color: var(--dark-mid); line-height: 1.7; }
+
+    .flow-step-role {
+      display: inline-block;
+      font-size: 11px; font-weight: 800;
+      padding: 3px 10px;
+      border-radius: var(--r-pill);
+      border: 1.5px solid;
+      margin-bottom: 8px;
+    }
+    .flow-step-role.ours   { background: var(--blue-pale); color: var(--blue-dk); border-color: var(--blue-dk); }
+    .flow-step-role.client { background: var(--mint-pale); color: var(--mint-dk); border-color: var(--mint-dk); }
+
+    .flow-note {
+      text-align: center;
+      margin-top: 36px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark-mid);
+    }
+    .flow-note strong { color: var(--blue-dk); }
+
+    /* ===== お客様の声 ===== */
+    .voices {
+      padding: 80px 20px;
+      background: var(--white);
+    }
+    .voices-inner { max-width: 960px; margin: 0 auto; }
+    .voices-header { text-align: center; margin-bottom: 48px; }
+
+    .voices-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .voice-card {
+      background: var(--white);
+      border-radius: var(--r-lg);
+      border: var(--bw) solid var(--dark);
+      box-shadow: var(--sh-dark);
+      padding: 28px;
+      position: relative;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .voice-card:hover { transform: translate(-2px,-2px); box-shadow: 7px 7px 0px var(--dark); }
+    .voice-card:nth-child(1) { border-top: 6px solid var(--blue); }
+    .voice-card:nth-child(2) { border-top: 6px solid var(--mint); }
+    .voice-card:nth-child(3) { border-top: 6px solid var(--yellow); }
+
+    .voice-quote-mark {
+      font-size: 60px;
+      line-height: 1;
+      color: rgba(28,30,64,0.08);
+      font-family: Georgia, serif;
+      margin-bottom: -10px;
+    }
+    .voice-stars { display: flex; gap: 3px; margin-bottom: 12px; }
+    .voice-star  { color: var(--yellow); font-size: 15px; }
+    .voice-text  { font-size: 13px; color: var(--dark-mid); line-height: 1.9; margin-bottom: 20px; }
+    .voice-person {
+      display: flex; align-items: center; gap: 12px;
+      padding-top: 16px;
+      border-top: 2px dashed var(--border-col);
+    }
+    .voice-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: var(--bw) solid var(--dark);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .voice-card:nth-child(1) .voice-avatar { background: var(--blue-pale); }
+    .voice-card:nth-child(2) .voice-avatar { background: var(--mint-pale); }
+    .voice-card:nth-child(3) .voice-avatar { background: var(--yellow-pale); }
+
+    .voice-name  { font-size: 13px; font-weight: 900; color: var(--dark); }
+    .voice-desc  { font-size: 11px; color: var(--gray); margin-top: 2px; }
+    .voice-result {
+      display: inline-block;
+      font-size: 11px; font-weight: 800;
+      background: var(--mint-pale);
+      color: var(--mint-dk);
+      border: 1.5px solid var(--mint-dk);
+      padding: 2px 8px;
+      border-radius: var(--r-pill);
+      margin-top: 4px;
+    }
+
+    /* ===== 料金プラン ===== */
+    .pricing {
+      padding: 80px 20px;
+      background: var(--bg);
+      border-top: var(--bw) solid var(--dark);
+      border-bottom: var(--bw) solid var(--dark);
+    }
+    .pricing-inner { max-width: 960px; margin: 0 auto; }
+    .pricing-header { text-align: center; margin-bottom: 48px; }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .pricing-card {
+      background: var(--white);
+      border-radius: var(--r-xl);
+      border: var(--bw) solid var(--dark);
+      box-shadow: var(--sh-dark);
+      padding: 36px 32px;
+      position: relative;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .pricing-card:hover { transform: translate(-2px,-2px); box-shadow: 7px 7px 0px var(--dark); }
+    .pricing-card.featured {
+      border-color: var(--blue-dk);
+      box-shadow: var(--sh-blue);
+    }
+    .pricing-card.featured:hover { box-shadow: 7px 7px 0px var(--blue-dk); }
+
+    .pricing-badge {
+      position: absolute;
+      top: -14px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--yellow);
+      border: var(--bw) solid var(--dark);
+      box-shadow: 2px 2px 0px var(--dark);
+      color: var(--dark);
+      font-size: 12px; font-weight: 900;
+      padding: 5px 18px;
+      border-radius: var(--r-pill);
+      white-space: nowrap;
+    }
+
+    .pricing-plan-name {
+      font-size: 12px; font-weight: 800;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 6px;
+    }
+    .pricing-plan-title { font-size: 18px; font-weight: 900; color: var(--dark); margin-bottom: 14px; }
+
+    .pricing-price { margin-bottom: 20px; }
+    .pricing-price-label { font-size: 12px; color: var(--gray); }
+    .pricing-price-amount {
+      font-size: 36px; font-weight: 900;
+      color: var(--blue);
+      line-height: 1.2;
+    }
+    .pricing-price-amount small { font-size: 18px; font-weight: 700; }
+    .pricing-price-note { font-size: 12px; color: var(--gray); }
+
+    .pricing-divider { height: 2px; border-top: 2px dashed var(--border-col); margin: 20px 0; }
+
+    .pricing-features { list-style: none; margin-bottom: 24px; }
+    .pricing-features li {
+      font-size: 13px; color: var(--dark-mid);
+      padding: 6px 0;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .pricing-features li::before {
+      content: '✓';
+      display: flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px;
+      background: var(--mint);
+      color: white;
+      border-radius: 50%;
+      border: 2px solid var(--dark);
+      font-size: 10px; font-weight: 900;
+      flex-shrink: 0; margin-top: 1px;
+    }
+
+    .pricing-cta {
+      display: block; width: 100%; text-align: center;
+      padding: 15px;
+      border-radius: var(--r-pill);
+      font-size: 14px; font-weight: 900;
+      border: var(--bw) solid var(--dark);
+      transition: transform 0.1s, box-shadow 0.1s;
+      cursor: pointer;
+    }
+    .pricing-cta.primary {
+      background: var(--blue);
+      color: var(--white);
+      box-shadow: var(--sh-dark-sm);
+    }
+    .pricing-cta.primary:hover  { transform: translate(1px,1px); box-shadow: 2px 2px 0px var(--dark); }
+    .pricing-cta.primary:active { transform: translate(3px,3px); box-shadow: none; }
+    .pricing-cta.outline {
+      background: var(--white);
+      color: var(--blue-dk);
+      box-shadow: 3px 3px 0px var(--blue-dk);
+      border-color: var(--blue-dk);
+    }
+    .pricing-cta.outline:hover  { transform: translate(1px,1px); box-shadow: 2px 2px 0px var(--blue-dk); }
+    .pricing-cta.outline:active { transform: translate(3px,3px); box-shadow: none; }
+
+    .pricing-note {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 14px; font-weight: 600;
+      color: var(--gray);
+      line-height: 1.8;
+    }
+    .pricing-note strong { color: var(--dark-mid); }
+
+    /* ===== 最終CTA ===== */
+    .final-cta {
+      padding: 80px 20px;
+      background: var(--dark);
+      border-top: var(--bw) solid var(--dark);
+      position: relative;
+      overflow: hidden;
+    }
+    .final-cta-dots {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1.5px, transparent 1.5px);
+      background-size: 22px 22px;
+      pointer-events: none;
+    }
+    /* 装飾円 */
+    .final-deco {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .final-deco.d1 {
+      width: 300px; height: 300px;
+      top: -100px; right: -80px;
+      border: 60px solid rgba(59,111,240,0.15);
+    }
+    .final-deco.d2 {
+      width: 220px; height: 220px;
+      bottom: -70px; left: -50px;
+      border: 50px solid rgba(43,201,168,0.12);
+    }
+    .final-cta-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative; z-index: 1;
+    }
+    .final-cta-label {
+      display: inline-block;
+      font-size: 12px; font-weight: 800; letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.7);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      padding: 5px 16px;
+      border-radius: var(--r-pill);
+      margin-bottom: 24px;
+    }
+    .final-cta-title {
+      font-size: clamp(24px, 4.5vw, 38px);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .final-cta-sub {
+      font-size: 15px; font-weight: 500;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.9;
+      margin-bottom: 40px;
+    }
+    .final-cta-buttons {
+      display: flex; gap: 16px;
+      justify-content: center; flex-wrap: wrap;
+    }
+    /* CTAセクション内のボタンは白ベース */
+    .final-cta-buttons .btn-primary {
+      background: var(--white);
+      color: var(--blue-dk);
+      border-color: var(--white);
+      box-shadow: 5px 5px 0px rgba(255,255,255,0.25);
+    }
+    .final-cta-buttons .btn-primary:hover { box-shadow: 3px 3px 0px rgba(255,255,255,0.25); }
+
+    .final-cta-assurance {
+      display: flex; justify-content: center; gap: 24px;
+      margin-top: 32px; flex-wrap: wrap;
+    }
+    .final-cta-assurance-item {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 12px; font-weight: 700;
+      color: rgba(255,255,255,0.5);
+    }
+    .final-cta-assurance-item::before {
+      content: '✓';
+      display: flex; align-items: center; justify-content: center;
+      width: 16px; height: 16px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 50%;
+      font-size: 9px;
+    }
+
+    /* ===== フッター ===== */
+    .footer {
+      background: #111726;
+      padding: 48px 20px 28px;
+      color: rgba(255,255,255,0.55);
+      border-top: var(--bw) solid rgba(255,255,255,0.12);
+    }
+    .footer-inner { max-width: 960px; margin: 0 auto; }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 32px;
+      border-bottom: 2px dashed rgba(255,255,255,0.1);
+      margin-bottom: 24px;
+    }
+    .footer-brand {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px;
+    }
+    .footer-brand-icon {
+      width: 36px; height: 36px;
+      background: var(--blue);
+      border-radius: 10px;
+      border: var(--bw) solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .footer-brand-name { font-size: 18px; font-weight: 900; color: var(--white); }
+    .footer-tagline { font-size: 13px; line-height: 1.9; color: rgba(255,255,255,0.45); margin-bottom: 0; }
+    .footer-contact-title {
+      font-size: 12px; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 14px;
+    }
+    .footer-contact-list { list-style: none; }
+    .footer-contact-list li {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: rgba(255,255,255,0.55);
+      padding: 6px 0;
+    }
+    .footer-contact-list li svg { color: var(--blue); flex-shrink: 0; }
+    .footer-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .footer-copy { font-size: 12px; color: rgba(255,255,255,0.25); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a {
+      font-size: 12px; color: rgba(255,255,255,0.35);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: rgba(255,255,255,0.7); }
+
+    /* ===== スクロールフェードイン ===== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .fade-in.visible          { opacity: 1; transform: translateY(0); }
+    .fade-in-delay-1 { transition-delay: 0.08s; }
+    .fade-in-delay-2 { transition-delay: 0.16s; }
+    .fade-in-delay-3 { transition-delay: 0.24s; }
+    .fade-in-delay-4 { transition-delay: 0.32s; }
+
+    /* ===== レスポンシブ ===== */
+    @media (max-width: 768px) {
+      .hero { padding: 100px 20px 60px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+      .hero-visual { display: none; }
+      .hero-actions-row { flex-direction: column; }
+      .hero-actions-row .btn { width: 100%; max-width: 340px; }
+      .service-grid { grid-template-columns: 1fr; }
+      .flow-steps { grid-template-columns: repeat(2, 1fr); }
+      .flow-steps::before { display: none; }
+      .voices-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+      .footer-top { grid-template-columns: 1fr; gap: 32px; }
+      .final-cta-buttons { flex-direction: column; align-items: center; }
+      .final-cta-buttons .btn { width: 100%; max-width: 320px; }
+    }
+    @media (max-width: 480px) {
+      .trouble-grid { grid-template-columns: 1fr; }
+      .flow-steps   { grid-template-columns: 1fr; }
+      .section-title { font-size: 22px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ===== アクセシビリティ ===== */
+    a:focus-visible, button:focus-visible {
+      outline: 3px solid var(--blue);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    /* ===================================================
+       ポップ・インタラクション拡張
+    =================================================== */
+
+    /* スプリングイージング変数 */
+    :root {
+      --spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* ---- ボタン：スケールでポップ ---- */
+    .btn {
+      transition: transform 0.2s var(--spring), box-shadow 0.15s ease !important;
+    }
+    .btn:hover  { transform: scale(1.07) !important; }
+    .btn:active { transform: scale(0.94) translate(3px,3px) !important; box-shadow: none !important; }
+
+    /* ---- ナビCTA ---- */
+    .navbar-cta {
+      transition: transform 0.2s var(--spring), box-shadow 0.15s ease !important;
+    }
+    .navbar-cta:hover  { transform: scale(1.08) translateY(-1px) !important; box-shadow: 5px 5px 0px var(--dark) !important; }
+    .navbar-cta:active { transform: scale(0.94) !important; box-shadow: none !important; }
+
+    /* ---- カード共通：スプリングスケール ---- */
+    .trouble-item,
+    .service-card,
+    .voice-card,
+    .pricing-card {
+      transition: transform 0.25s var(--spring), box-shadow 0.18s ease !important;
+    }
+    .trouble-item:hover  { transform: scale(1.03) translateY(-6px) !important; box-shadow: 9px 9px 0px var(--dark) !important; }
+    .service-card:hover  { transform: scale(1.02) translateY(-6px) !important; box-shadow: 9px 9px 0px var(--dark) !important; }
+    .voice-card:hover    { transform: scale(1.03) translateY(-6px) !important; box-shadow: 9px 9px 0px var(--dark) !important; }
+    .pricing-card:hover  { transform: scale(1.03) translateY(-6px) !important; box-shadow: 9px 9px 0px var(--dark) !important; }
+    .pricing-card.featured:hover { box-shadow: 9px 9px 0px var(--blue-dk) !important; }
+
+    /* ---- サービスカード：アイコンがはじける ---- */
+    .service-card .service-card-icon {
+      transition: transform 0.25s var(--spring);
+    }
+    .service-card:hover .service-card-icon {
+      transform: scale(1.2) rotate(-6deg);
+    }
+
+    /* ---- 悩みアイコン：ホバーでぴょんっ ---- */
+    .trouble-item .trouble-item-icon {
+      transition: transform 0.25s var(--spring);
+    }
+    .trouble-item:hover .trouble-item-icon {
+      transform: scale(1.22) rotate(8deg);
+    }
+
+    /* ---- フローステップ番号：ホバーで弾む ---- */
+    .flow-step .flow-step-num {
+      transition: transform 0.25s var(--spring);
+    }
+    .flow-step:hover .flow-step-num {
+      transform: scale(1.14);
+    }
+
+    /* ---- チップ：ホバーで微浮き ---- */
+    .chip {
+      transition: transform 0.2s var(--spring), box-shadow 0.15s ease;
+      cursor: default;
+    }
+    .chip:hover {
+      transform: scale(1.06) translateY(-2px);
+      box-shadow: 5px 5px 0px var(--dark);
+    }
+
+    /* ---- 料金バッジ：ふるふる ---- */
+    @keyframes badgeWiggle {
+      0%,100% { transform: translateX(-50%) rotate(0deg) scale(1); }
+      20%      { transform: translateX(-50%) rotate(-4deg) scale(1.05); }
+      60%      { transform: translateX(-50%) rotate(4deg) scale(1.05); }
+    }
+    .pricing-badge {
+      animation: badgeWiggle 4s ease-in-out infinite;
+    }
+
+    /* ---- ヒーローカード・フロートアニメーション ---- */
+    @keyframes floatUp {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-9px); }
+    }
+    .hero-floating-tag {
+      animation: floatUp 3s ease-in-out infinite;
+    }
+    .hero-card {
+      animation: floatUp 4.2s ease-in-out infinite;
+      animation-delay: 0.4s;
+    }
+
+    /* ---- ヒーローLINEボタン：呼吸グロー ---- */
+    @keyframes lineBreath {
+      0%,100% { box-shadow: 5px 5px 0px var(--dark); }
+      50%      { box-shadow: 5px 5px 0px var(--dark), 0 0 0 10px rgba(6,199,85,0.12); }
+    }
+    .hero-actions-row .btn-line {
+      animation: lineBreath 3s ease-in-out infinite;
+    }
+
+    /* ---- 最終CTAボタン：注目パルス ---- */
+    @keyframes ctaPulse {
+      0%,100% { box-shadow: 5px 5px 0px rgba(255,255,255,0.22); }
+      50%      { box-shadow: 5px 5px 0px rgba(255,255,255,0.22), 0 0 0 12px rgba(255,255,255,0.07); }
+    }
+    .final-cta-buttons .btn-primary {
+      animation: ctaPulse 2.8s ease-in-out infinite;
+    }
+    .final-cta-buttons .btn-line {
+      animation: ctaPulse 2.8s ease-in-out infinite;
+      animation-delay: 1.4s;
+    }
+
+    /* ---- 星評価：カードホバーでポップ ---- */
+    .voice-card:hover .voice-star {
+      animation: starPop 0.35s var(--spring) both;
+    }
+    .voice-card:hover .voice-star:nth-child(1) { animation-delay: 0s; }
+    .voice-card:hover .voice-star:nth-child(2) { animation-delay: 0.05s; }
+    .voice-card:hover .voice-star:nth-child(3) { animation-delay: 0.10s; }
+    .voice-card:hover .voice-star:nth-child(4) { animation-delay: 0.15s; }
+    .voice-card:hover .voice-star:nth-child(5) { animation-delay: 0.20s; }
+    @keyframes starPop {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.5) rotate(15deg); }
+      100% { transform: scale(1.1); }
+    }
+
+    /* ---- フェードイン：スケール込みでより立体的に ---- */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px) scale(0.96);
+      transition: opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out);
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* ---- スクロールを促す矢印（ヒーロー下端） ---- */
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--dark-mid);
+      font-size: 11px;
+      font-weight: 700;
+      opacity: 0.5;
+      z-index: 1;
+      animation: scrollBounce 2s ease-in-out infinite;
+    }
+    @keyframes scrollBounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(6px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== ナビゲーション ===== -->
+  <nav class="navbar" role="navigation" aria-label="メインナビゲーション">
+    <div class="navbar-inner">
+      <div class="navbar-logo">
+        <div class="navbar-logo-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <rect x="2" y="2" width="6" height="6" rx="1.5" fill="white" opacity="0.9"/>
+            <rect x="10" y="2" width="6" height="6" rx="1.5" fill="white" opacity="0.6"/>
+            <rect x="2" y="10" width="6" height="6" rx="1.5" fill="white" opacity="0.6"/>
+            <rect x="10" y="10" width="6" height="6" rx="1.5" fill="white" opacity="0.9"/>
+          </svg>
+        </div>
+        <span class="navbar-logo-text">解決<span>.com</span></span>
+      </div>
+      <a href="#contact" class="navbar-cta">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M7 1L13 7M13 7L7 13M13 7H1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        無料相談する
+      </a>
+    </div>
+  </nav>
+
+  <!-- ===== ヒーロー ===== -->
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="hero-deco-circle c1" aria-hidden="true"></div>
+    <div class="hero-deco-circle c2" aria-hidden="true"></div>
+    <div class="hero-grid">
+
+      <!-- 左：コピー -->
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          美容サロン・美容室の経営者様へ
+        </div>
+
+        <h1 class="hero-title" id="hero-heading">
+          オーナーの仕事は、<br>
+          <em>お客様と向き合うこと</em>。<br>
+          日々の雑務に追われる<br>毎日から、<br>
+          卒業しませんか？
+        </h1>
+
+        <p class="hero-sub">
+          「何から手をつけていいか分からない」——そのひと言だけで大丈夫です。<br>
+          通信業界15年・2,000件以上の改善経験をもつ担当者が、<br>
+          あなたの"右腕"として一緒に考えます。
+        </p>
+
+        <div class="hero-assurance">
+          ✦ 専門用語なし・高い費用なし・あなたのペースで
+        </div>
+
+        <div class="hero-actions-row">
+          <a href="#contact" class="btn btn-primary btn-lg">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <rect x="2" y="4" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M2 6L9 10.5L16 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            無料で相談してみる
+          </a>
+          <a href="#line" class="btn btn-line btn-lg">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <rect x="2" y="2" width="14" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M9 5C5.8 5 4 7 4 8.8C4 10.4 5.4 11.7 7 12.2L6.5 13.5C6.4 13.7 6.6 14 6.9 13.9L9.2 12.5C12.4 12.5 14 10.6 14 8.8C14 7 12.2 5 9 5Z" fill="currentColor"/>
+            </svg>
+            LINEで気軽に相談する
+          </a>
+        </div>
+
+        <div class="hero-trust" style="margin-top: 14px;">
+          <div class="hero-trust-item">完全無料・相談だけでもOK</div>
+          <div class="hero-trust-item">しつこい営業は一切なし</div>
+        </div>
+      </div>
+
+      <!-- 右：装飾カード -->
+      <div class="hero-visual" aria-hidden="true">
+        <div style="position:relative; padding-top: 20px;">
+          <div class="hero-floating-tag">✦ 小規模サロン専門サポート</div>
+          <div class="hero-card">
+            <p class="hero-card-title">解決できる主なお悩み</p>
+
+            <div class="hero-card-item">
+              <div class="hero-card-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <rect x="3" y="3" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M7 10H13M7 7H13M7 13H10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="hero-card-text">
+                <strong>予約管理・スケジュール</strong>
+                <span>Excelや手書きからの脱却</span>
+                <span class="hero-card-badge">自動化で時短</span>
+              </div>
+            </div>
+
+            <div class="hero-card-item">
+              <div class="hero-card-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M10 7V10L12.5 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="hero-card-text">
+                <strong>毎日の事務作業の効率化</strong>
+                <span>繰り返し作業をAIで削減</span>
+                <span class="hero-card-badge">AI活用</span>
+              </div>
+            </div>
+
+            <div class="hero-card-item">
+              <div class="hero-card-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M10 3C7 3 4.5 5 4.5 7.5C4.5 9.5 6 11 8 11.5L7.5 13.5C7.4 13.8 7.7 14 8 13.8L11 12H13C15.5 12 17 10.5 17 8.5C17 5.5 14 3 10 3Z" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <div class="hero-card-text">
+                <strong>SNS・集客・リピート対策</strong>
+                <span>何から始めるかを一緒に整理</span>
+                <span class="hero-card-badge">集客改善</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- スクロール促進矢印 -->
+    <div class="hero-scroll-hint" aria-hidden="true">
+      <span>スクロール</span>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M5 8L10 13L15 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ===== 共感・悩みセクション ===== -->
+  <section class="trouble" aria-labelledby="trouble-heading">
+    <div class="trouble-inner">
+      <span class="chip yellow">💬 よくあるご相談 TOP 5</span>
+      <h2 class="section-title" id="trouble-heading">
+        「何から手をつけていいか<br>分からない」——<br>
+        その言葉、よく聞きます。
+      </h2>
+      <p class="section-lead">
+        サロンを毎日一生懸命まわしているのに、気づくと雑務で1日が終わっている。<br>
+        そんなオーナーさんから、こんなご相談をよくいただきます。
+      </p>
+
+      <div class="trouble-grid">
+        <div class="trouble-item fade-in fade-in-delay-1">
+          <div class="trouble-item-icon">🤔</div>
+          <div class="trouble-item-text">
+            <strong>「何から手をつけていいか分からない」</strong>
+            改善したい気持ちはあるのに、どこから始めればいいか迷ってしまい、結局なにも変わらないまま時間だけが過ぎている。
+          </div>
+        </div>
+        <div class="trouble-item fade-in fade-in-delay-2">
+          <div class="trouble-item-icon">💻</div>
+          <div class="trouble-item-text">
+            <strong>「IT化を進めたいけど、何をすればいいか分からない」</strong>
+            予約ツール・LINE公式・Googleマップ…どれが自分のサロンに合うのか、情報が多すぎて選べない。
+          </div>
+        </div>
+        <div class="trouble-item fade-in fade-in-delay-3">
+          <div class="trouble-item-icon">⏰</div>
+          <div class="trouble-item-text">
+            <strong>「オーナー業に集中できない」</strong>
+            売上管理・シフト調整・お客様への返信…こまごました作業に追われて、接客や技術を磨く時間がとれない。
+          </div>
+        </div>
+        <div class="trouble-item fade-in fade-in-delay-4">
+          <div class="trouble-item-icon">💬</div>
+          <div class="trouble-item-text">
+            <strong>「スタッフとの連携がうまくいかない」</strong>
+            シフトや申し送りがLINEと紙でバラバラ。言った・言わないのトラブルが起きやすく、改善したいがどうすればいいか分からない。
+          </div>
+        </div>
+        <div class="trouble-item fade-in fade-in-delay-1">
+          <div class="trouble-item-icon">😟</div>
+          <div class="trouble-item-text">
+            <strong>「SNS・集客・リピート対策、何から始めればいい？」</strong>
+            周りのサロンはInstagramやLINEをうまく使っているのに、自分はどこから手をつければいいか分からず焦っている。
+          </div>
+        </div>
+      </div>
+
+      <div class="trouble-closing fade-in">
+        <p>
+          どれかひとつでも当てはまったら、<span>まずは話してください。</span><br>
+          「どれも全部当てはまる」でも大丈夫。一緒に整理するところから始めましょう。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== サービス概要 ===== -->
+  <section class="service" aria-labelledby="service-heading">
+    <div class="service-inner">
+      <div class="service-header fade-in">
+        <span class="chip blue">🔧 解決.com の 3 つのアプローチ</span>
+        <h2 class="section-title" id="service-heading">
+          「ツール」「仕組み」「チーム」——<br>
+          3つをまとめて整えます
+        </h2>
+        <p class="section-lead">
+          ツールを入れるだけでは、業務は変わりません。<br>
+          使いこなすための"仕組み"と、スタッフが動ける"ルール"まで一緒に作ります。
+        </p>
+      </div>
+
+      <div class="service-grid">
+        <div class="service-card fade-in fade-in-delay-1">
+          <span class="service-card-num">01</span>
+          <div class="service-card-icon">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <circle cx="13" cy="9" r="5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M4 22C4 18.1 8 15 13 15C18 15 22 18.1 22 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="service-card-title">現場崩壊を知っているからこそのヒアリング</h3>
+          <p class="service-card-text">
+            過去2,000件以上の業務改善に関わってきた担当者が、あなたのサロンの「今」を丁寧にお聞きします。
+            IT用語一切なし。話してもらうだけで、課題が見えてきます。
+          </p>
+          <span class="service-card-tag trust">15年以上の実務経験</span>
+        </div>
+
+        <div class="service-card fade-in fade-in-delay-2">
+          <span class="service-card-num">02</span>
+          <div class="service-card-icon">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <path d="M4 20L10 14L14 18L22 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="22" cy="8" r="2.5" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3 class="service-card-title">高額システムに頼らないIT活用</h3>
+          <p class="service-card-text">
+            Googleのスプレッドシートや無料のLINE公式アカウントなど、<strong>お金をかけずに使えるツール</strong>を最大限活かします。
+            「安くできるなら安くする」が私たちの哲学です。
+          </p>
+          <span class="service-card-tag trust">低コスト・低リスク</span>
+        </div>
+
+        <div class="service-card fade-in fade-in-delay-3">
+          <span class="service-card-num">03</span>
+          <div class="service-card-icon">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <rect x="4" y="7" width="18" height="13" rx="2.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M9 4L13 7L17 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 13H17M9 17H14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="service-card-title">「自分でも動かせる」まで伴走します</h3>
+          <p class="service-card-text">
+            ツールを入れて終わりではなく、スタッフさんも含めて「自走できる状態」になるまでサポート。
+            LINE・メールでいつでも気軽に相談できます。
+          </p>
+          <span class="service-card-tag trust">伴走力・定着支援</span>
+        </div>
+
+        <div class="service-card fade-in fade-in-delay-4">
+          <span class="service-card-num">04</span>
+          <div class="service-card-icon">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <path d="M13 4L15.5 9L21 10L17 14L18 20L13 17.5L8 20L9 14L5 10L10.5 9L13 4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="service-card-title">AIと自動化で「繰り返し作業」をなくす</h3>
+          <p class="service-card-text">
+            LINE公式アカウントの自動返信・予約確認メッセージ・Instagram投稿文の自動作成など、
+            毎日のルーティン作業をAIと仕組みで自動化します。
+          </p>
+          <span class="service-card-tag speed">⚡ LINE自動化・AI文章作成</span>
+        </div>
+      </div>
+
+      <div class="service-catchphrase dot-bg fade-in">
+        <p>
+          「むずかしそう」という気持ちのまま、連絡してください。<br>
+          そこからが、私たちの仕事のスタートです。
+        </p>
+        <small>千葉県佐倉市発 ／ 全国オンライン対応 ／ 初回相談は完全無料</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 導入の流れ ===== -->
+  <section class="flow" aria-labelledby="flow-heading">
+    <div class="flow-inner">
+      <div class="flow-header fade-in">
+        <span class="chip mint">🗺 ご相談〜改善までの流れ</span>
+        <h2 class="section-title" id="flow-heading">
+          最初の一歩は、<br>メッセージを送るだけ
+        </h2>
+        <p class="section-lead">
+          難しい準備は一切不要。「困っていること」を一言教えていただくだけでOKです。
+        </p>
+      </div>
+
+      <div class="flow-steps">
+        <div class="flow-step fade-in fade-in-delay-1">
+          <div class="flow-step-num">
+            <span>STEP</span>
+            <strong>1</strong>
+          </div>
+          <div class="flow-step-card">
+            <span class="flow-step-role client">お客様</span>
+            <h3 class="flow-step-title">お問い合わせ・LINE登録</h3>
+            <p class="flow-step-text">フォームまたはLINEから「こんなことで困っています」と一言送るだけ。準備不要です。</p>
+          </div>
+        </div>
+
+        <div class="flow-step fade-in fade-in-delay-2">
+          <div class="flow-step-num">
+            <span>STEP</span>
+            <strong>2</strong>
+          </div>
+          <div class="flow-step-card">
+            <span class="flow-step-role ours">解決.com</span>
+            <h3 class="flow-step-title">無料ヒアリング（30〜45分）</h3>
+            <p class="flow-step-text">ZoomまたはLINE電話で現状をお聞きします。専門用語なし・録音なし。ゆっくり話してください。</p>
+          </div>
+        </div>
+
+        <div class="flow-step fade-in fade-in-delay-3">
+          <div class="flow-step-num">
+            <span>STEP</span>
+            <strong>3</strong>
+          </div>
+          <div class="flow-step-card">
+            <span class="flow-step-role ours">解決.com</span>
+            <h3 class="flow-step-title">改善プランのご提案</h3>
+            <p class="flow-step-text">ヒアリング内容をもとに「何から始めるべきか」を整理し、費用感とセットでわかりやすくご提案します。</p>
+          </div>
+        </div>
+
+        <div class="flow-step fade-in fade-in-delay-4">
+          <div class="flow-step-num">
+            <span>STEP</span>
+            <strong>4</strong>
+          </div>
+          <div class="flow-step-card">
+            <span class="flow-step-role ours">解決.com</span>
+            <h3 class="flow-step-title">導入・伴走サポート開始</h3>
+            <p class="flow-step-text">「やってみる」と決まったら、設定から使い方説明まで全部サポート。運用後も気軽に相談できます。</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="flow-note fade-in">
+        <strong>ご提案後、「やっぱり今はいいかな」でもまったく大丈夫です。</strong><br>
+        押し売りは一切しません。2,000件以上のサポート経験から言えるのは、<br>「納得してから始めた人ほど、うまくいく」ということです。
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== お客様の声 ===== -->
+  <section class="voices" aria-labelledby="voices-heading">
+    <div class="voices-inner">
+      <div class="voices-header fade-in">
+        <span class="chip blue">⭐ お客様の声</span>
+        <h2 class="section-title" id="voices-heading">
+          「やっとITが怖くなくなった」<br>
+          そんな声をいただいています
+        </h2>
+        <p class="section-lead">※掲載内容は個人が特定されないよう一部変更しています。</p>
+      </div>
+
+      <div class="voices-grid">
+        <div class="voice-card fade-in fade-in-delay-1">
+          <div class="voice-quote-mark">"</div>
+          <div class="voice-stars">
+            <span class="voice-star">★</span><span class="voice-star">★</span><span class="voice-star">★</span>
+            <span class="voice-star">★</span><span class="voice-star">★</span>
+          </div>
+          <p class="voice-text">
+            「何から手をつけていいか分からない」とお伝えしたら、現状を丁寧に整理してくれて、
+            まず無料ツールから始めましょうと言ってくれました。今は予約管理が自動化されてダブルブッキングもゼロ。
+            難しいことは全部任せられて、本来の接客に集中できるようになりました。
+          </p>
+          <div class="voice-person">
+            <div class="voice-avatar">✂</div>
+            <div>
+              <p class="voice-name">A.Sさん（40代）</p>
+              <p class="voice-desc">美容室オーナー・スタッフ3名</p>
+              <span class="voice-result">予約ミス ゼロを達成</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="voice-card fade-in fade-in-delay-2">
+          <div class="voice-quote-mark">"</div>
+          <div class="voice-stars">
+            <span class="voice-star">★</span><span class="voice-star">★</span><span class="voice-star">★</span>
+            <span class="voice-star">★</span><span class="voice-star">★</span>
+          </div>
+          <p class="voice-text">
+            Instagramの投稿文をAIで作ってもらう方法を教えてもらって、
+            毎日1時間かかっていたSNS作業が15分以内に。その分お客様との会話に時間を使えるようになって、
+            リピート率も上がってきた気がします。本当に感謝しています。
+          </p>
+          <div class="voice-person">
+            <div class="voice-avatar">💆</div>
+            <div>
+              <p class="voice-name">M.Tさん（35代）</p>
+              <p class="voice-desc">プライベートサロン・個人経営</p>
+              <span class="voice-result">SNS作業時間 75%削減</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="voice-card fade-in fade-in-delay-3">
+          <div class="voice-quote-mark">"</div>
+          <div class="voice-stars">
+            <span class="voice-star">★</span><span class="voice-star">★</span><span class="voice-star">★</span>
+            <span class="voice-star">★</span><span class="voice-star">★</span>
+          </div>
+          <p class="voice-text">
+            他のIT業者さんは専門用語ばかりで「結局何が必要なの？」とモヤモヤしていましたが、
+            ここは「高いシステムは使わなくていい」と言ってくれて、Googleのスプレッドシートだけで
+            スタッフ連絡が全部まとまりました。余計な費用が一切かからなかったのが本当によかったです。
+          </p>
+          <div class="voice-person">
+            <div class="voice-avatar">💅</div>
+            <div>
+              <p class="voice-name">K.Nさん（48代）</p>
+              <p class="voice-desc">ネイル・アイラッシュサロン・スタッフ5名</p>
+              <span class="voice-result">スタッフ連絡ミス 激減</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 料金プラン ===== -->
+  <section class="pricing" aria-labelledby="pricing-heading">
+    <div class="pricing-inner">
+      <div class="pricing-header fade-in">
+        <span class="chip yellow">💰 料金・プラン</span>
+        <h2 class="section-title" id="pricing-heading">
+          小さく始めて、<br>必要になったら広げていく
+        </h2>
+        <p class="section-lead">
+          高額なシステムは不要です。まず無料で話してみて、必要な分だけ始めましょう。
+        </p>
+      </div>
+
+      <!-- モニター募集バナー -->
+      <div class="fade-in" style="
+        background: var(--yellow-pale);
+        border: var(--bw) solid var(--dark);
+        border-left: 6px solid var(--yellow);
+        box-shadow: var(--sh-dark);
+        border-radius: var(--r-md);
+        padding: 20px 28px;
+        margin-bottom: 28px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        max-width: 720px;
+        margin-left: auto;
+        margin-right: auto;
+      ">
+        <div style="font-size: 28px;">🎁</div>
+        <div>
+          <p style="font-size: 14px; font-weight: 900; color: var(--dark); margin-bottom: 4px;">
+            【期間限定】モニター募集中 — 先着2社のみ、最大 <span style="color:var(--yellow-dk); font-size:18px;">50% OFF</span>
+          </p>
+          <p style="font-size: 13px; color: var(--dark-mid); line-height: 1.7;">
+            正規料金から大幅割引でご利用いただける代わりに、率直なフィードバックをお聞かせください。<br>
+            枠には限りがありますので、気になった方はお早めにご連絡ください。
+          </p>
+        </div>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-card fade-in fade-in-delay-1">
+          <p class="pricing-plan-name">まずはここから</p>
+          <h3 class="pricing-plan-title">プチIT診断（無料相談）</h3>
+          <div class="pricing-price">
+            <p class="pricing-price-label">初回相談</p>
+            <p class="pricing-price-amount"><small>¥</small>0</p>
+            <p class="pricing-price-note">完全無料・1時間まで</p>
+          </div>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li>現状のお悩みヒアリング（30〜45分）</li>
+            <li>「何から始めるか」を一緒に整理</li>
+            <li>おすすめツール・方向性のご提案</li>
+            <li>費用感の目安をご説明</li>
+            <li>相談後のしつこい営業なし</li>
+          </ul>
+          <a href="#contact" class="pricing-cta outline">まず無料相談してみる</a>
+        </div>
+
+        <div class="pricing-card featured fade-in fade-in-delay-2">
+          <span class="pricing-badge">🌟 一番人気</span>
+          <p class="pricing-plan-name">じっくり取り組みたい方へ</p>
+          <h3 class="pricing-plan-title">業務改善・伴走サポートプラン</h3>
+          <div class="pricing-price">
+            <p class="pricing-price-label">月額（目安）</p>
+            <p class="pricing-price-amount"><small>¥</small>15,000<small>〜</small></p>
+            <p class="pricing-price-note">※モニター期間中は最大50%OFF。まずはご相談ください。</p>
+          </div>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li>ツール選定・初期設定・操作説明</li>
+            <li>LINE公式・スプレッドシートの自動化設定</li>
+            <li>AI文章作成・SNS運用サポート</li>
+            <li>LINE・メールでの継続サポート（月4回）</li>
+            <li>途中解約OK・縛り期間なし</li>
+          </ul>
+          <a href="#contact" class="pricing-cta primary">このプランで相談する</a>
+        </div>
+      </div>
+
+      <p class="pricing-note fade-in">
+        ※上記はあくまで目安です。<strong>サロンの状況・ご要望に合わせた個別お見積り</strong>を無料でご提案します。<br>
+        「予算はないけど、とにかく改善したい」というご相談も大歓迎です。
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== 最終CTA ===== -->
+  <section class="final-cta" id="contact" aria-labelledby="cta-heading">
+    <div class="final-cta-dots" aria-hidden="true"></div>
+    <div class="final-deco d1" aria-hidden="true"></div>
+    <div class="final-deco d2" aria-hidden="true"></div>
+    <div class="final-cta-inner">
+      <span class="final-cta-label">Contact / 無料相談</span>
+      <h2 class="final-cta-title" id="cta-heading">
+        「何から手をつけていいか<br>分からない」——<br>
+        その一言から始めましょう
+      </h2>
+      <p class="final-cta-sub">
+        準備も勉強も必要ありません。「困っていること」をそのまま話してください。<br>
+        通信業界15年・2,000件以上の経験から、あなたに合った最初の一歩をご提案します。<br>
+        専門用語なし・押し売りなし・完全無料。
+      </p>
+
+      <div class="final-cta-buttons">
+        <a href="https://kaik-2.com/" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <rect x="2" y="4" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M2 6L9 10.5L16 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          無料相談を申し込む
+        </a>
+        <a href="https://lin.ee/shseBS1" id="line" target="_blank" rel="noopener noreferrer" class="btn btn-line btn-lg">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <rect x="2" y="2" width="14" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M9 5C5.8 5 4 7 4 8.8C4 10.4 5.4 11.7 7 12.2L6.5 13.5C6.4 13.7 6.6 14 6.9 13.9L9.2 12.5C12.4 12.5 14 10.6 14 8.8C14 7 12.2 5 9 5Z" fill="currentColor"/>
+          </svg>
+          LINEで相談する
+        </a>
+      </div>
+
+      <div class="final-cta-assurance">
+        <div class="final-cta-assurance-item">完全無料・相談のみでもOK</div>
+        <div class="final-cta-assurance-item">しつこい営業・勧誘なし</div>
+        <div class="final-cta-assurance-item">全国オンライン対応</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== フッター ===== -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand">
+            <div class="footer-brand-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <rect x="3" y="3" width="6" height="6" rx="1.5" fill="white" opacity="0.9"/>
+                <rect x="11" y="3" width="6" height="6" rx="1.5" fill="white" opacity="0.6"/>
+                <rect x="3" y="11" width="6" height="6" rx="1.5" fill="white" opacity="0.6"/>
+                <rect x="11" y="11" width="6" height="6" rx="1.5" fill="white" opacity="0.9"/>
+              </svg>
+            </div>
+            <span class="footer-brand-name">解決.com</span>
+          </div>
+          <p class="footer-tagline">
+            ITが苦手な方のための、やさしいIT・AI活用支援。<br>
+            千葉県佐倉市を拠点に、全国のサロン経営者を<br>
+            オンラインでサポートしています。
+          </p>
+        </div>
+
+        <div>
+          <p class="footer-contact-title">Contact</p>
+          <ul class="footer-contact-list">
+            <li>
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                <circle cx="7.5" cy="6" r="3" stroke="currentColor" stroke-width="1.3"/>
+                <path d="M2 13C2 10.2 4.5 8 7.5 8C10.5 8 13 10.2 13 13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+              会社名：解決.com
+            </li>
+            <li>
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                <path d="M7.5 1.5C5 1.5 3 3.5 3 6C3 9.5 7.5 13.5 7.5 13.5C7.5 13.5 12 9.5 12 6C12 3.5 10 1.5 7.5 1.5Z" stroke="currentColor" stroke-width="1.3"/>
+                <circle cx="7.5" cy="6" r="1.5" fill="currentColor"/>
+              </svg>
+              所在地：千葉県佐倉市（全国オンライン対応）
+            </li>
+            <li>
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                <rect x="1.5" y="3.5" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+                <path d="M1.5 5.5L7.5 9L13.5 5.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+              Webサイト：kaik-2.com
+            </li>
+            <li>
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                <rect x="2" y="2" width="11" height="11" rx="3" stroke="currentColor" stroke-width="1.3"/>
+                <path d="M7.5 5C5.1 5 3.5 6.6 3.5 8.1C3.5 9.4 4.6 10.4 6 10.8L5.6 12C5.5 12.2 5.7 12.4 5.9 12.3L8 11H9C11.4 11 13 9.5 13 8C13 6.2 11 5 7.5 5Z" fill="currentColor" opacity="0.7"/>
+              </svg>
+              LINE：@shseBS1
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2024 解決.com All rights reserved.</p>
+        <div class="footer-links">
+          <a href="https://kaik-2.com/" target="_blank" rel="noopener noreferrer">公式サイト</a>
+          <a href="#contact">お問い合わせ</a>
+          <a href="#">プライバシーポリシー</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== JS ===== -->
+  <script>
+    // スクロールフェードイン
+    const obs = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+    document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+    // スムーズスクロール
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href === '#') return;
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          window.scrollTo({ top: target.getBoundingClientRect().top + scrollY - 70, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // ナビボーダー強調
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      navbar.style.boxShadow = scrollY > 10 ? '0 3px 0px var(--dark)' : 'none';
+    });
+  </script>
+
+</body>
+</html>
